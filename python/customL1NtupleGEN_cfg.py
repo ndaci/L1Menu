@@ -88,19 +88,13 @@ options.register('customCSCTF',
                  False, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.bool,
-                 "Enables usage of new CSCTF FW and LUTs (actually does nothing right now)")
+                 "Enables usage of new CSCTF FW and LUTs")
 
 options.register('customPACT',
                  False, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.bool,
                  "Enables usage of new RPC PACT patterns")
-
-options.register('customGMT',
-                 False, #default value
-                 VarParsing.VarParsing.multiplicity.singleton,
-                 VarParsing.VarParsing.varType.bool,
-                 "Switches to minPT for the GMT")
 
 options.register('useUct2015',
                  False, #default value
@@ -124,7 +118,7 @@ options.parseArguments()
 
 
 #L1 ntuple
-from L1TriggerDPG.L1Ntuples.l1Ntuple_cfg import *
+from L1TriggerDPG.L1Ntuples.l1Ntuple_ReRunGenMet_cfg import *
 
 if options.runOnMC and hasattr(process,'l1NtupleProducer') :
     print "[L1Menu]: Running on MC reading also PileUpSummary info"
@@ -160,9 +154,9 @@ if options.reEmulation and not options.useUct2015 and options.jetSeedThr10GeV :
     from L1TriggerDPG.L1Menu.customiseL1Calos_cff import *
     customiseL1Calos(process, True)
 
-if options.reEmulation and (options.customDTTF or options.customCSCTF or options.customPACT or options.customGMT ) :
+if options.reEmulation and (options.customDTTF or options.customCSCTF or options.customPACT) :
     from L1TriggerDPG.L1Menu.customiseL1Muons_cff import *
-    customiseL1Muons(process, options.customDTTF, options.customCSCTF, options.customPACT, options.customGMT, options.dttfLutsFile)
+    customiseL1Muons(process, options.customDTTF, options.customCSCTF, options.customPACT, options.dttfLutsFile)
 
 if options.reEmulation and (options.useUct2015 or options.useStage1Layer2) :
     from L1TriggerDPG.L1Menu.customiseL1Calos_cff import *
@@ -191,7 +185,8 @@ if options.keepEDMOutput :
                                                                              'keep *_dttfReEmulDigis_*_*',
                                                                              'keep *_uctGctDigis_*_*',
                                                                              'keep *BXVector_*__L1TEMULATION',
-                                                                             'keep *_gctDigis_*_*')
+                                                                             'keep *_gctDigis_*_*',
+                                                                             'keep *_*gen*_*_*')
                                   )
 
     process.out = cms.EndPath(process.output)
